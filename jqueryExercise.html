@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Exercise</title>
+
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-sm-6 text-center">
+                <div class="container">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="name" placeholder="your name">
+                        <label for="Name">Enter Your Name:</label>
+                    </div>
+                    <div class="d-flex gap-2 mb-3">
+                        <label for="ChangeFont_size">Change Font-size:</label>
+                        <input type="button" class="input-group-text increase" value="+">
+                        <input type="button" class="input-group-text decrease" value="-">
+                    </div>
+                    <div class="d-flex gap-2 mb-3">
+                        <input type="checkbox" class="form-check-input" id="bold">
+                        <label for="ChangeFont_style" class="form-check-label">Bold</label>
+                        <input type="checkbox" class="form-check-input" id="italic">
+                        <label for="ChangeFont_style" class="form-check-label">Italic</label>
+                        <input type="checkbox" class="form-check-input" id="underline">
+                        <label for="ChangeFont_style" class="form-check-label">Underline</label>
+                    </div>
+                    <div class="d-flex gap-2 mb-3 text-nowrap">
+                        <label for="Select_Font-Style">Select Font-Style:</label>
+                        <select class="form-select" id="fontFamily" aria-label="Select Font">
+                            <option value="Arial">Arial</option>
+                            <option value="Verdana">Verdana </option>
+                            <option value="Impact">Impact </option>
+                            <option value="Comic Sans MS">Comic Sans MS</option>
+                            <option value="Georgia">Georgia</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="BackgroundColor">Pick Background color:</label>
+                        <input type="color" class="form-control" id="bgcolor" value="#ff0000">
+                        <span>Press enter key after pick Background color</span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="TextColor">Pick Text color:</label>
+                        <input type="color" class="form-control" id="textcolor" value="#ffc040">
+                        <span>Press enter key after pick Text color</span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="Orientation">Select Orientation:</label>
+                        <select class="form-select" id="orientation" aria-label="Select Orientation">
+                            <option value="Landscape">Landscape</option>
+                            <option value="Portrait">Portrait</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 text-center">
+                <p style="font-size: 18px;" id="text-div"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var ShowText = document.getElementById("text-div"); 
+        document.getElementById("name").addEventListener("blur", ShowName);
+        function ShowName() {
+            var name = document.getElementById("name");
+            if(name !== '') ShowText.innerHTML = (name.value);  
+        }
+
+        var btns = document.querySelectorAll('.increase , .decrease')
+        btns.forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var curFontSize = ShowText.style.fontSize;
+                if(this.value == '+' && ShowText.innerHTML !== '')  ShowText.style.fontSize = parseInt(curFontSize)+4 +'px';
+                if(this.value == '-' && ShowText.innerHTML !== '')  ShowText.style.fontSize = parseInt(curFontSize)-2 +'px';
+            })
+        })
+
+        var checkBoxes = document.querySelectorAll('#bold , #italic , #underline');
+        checkBoxes.forEach(function(checkbox) {
+            checkbox.addEventListener('click', function() {
+                if(this.checked == true && this.id == 'bold') ShowText.style.fontWeight = 'bold';
+                else ShowText.style.fontWeight = 'normal';
+                if(this.checked == true && this.id == 'italic') ShowText.style.fontStyle = 'italic';
+                else ShowText.style.fontStyle = 'normal';
+                if(this.checked == true && this.id == 'underline') ShowText.style.textDecoration = 'underline';
+                else ShowText.style.textDecoration = 'none';
+            })
+        })
+
+        document.getElementById("fontFamily").addEventListener("change", Txtfontfam);
+        function Txtfontfam(){
+            ShowText.style.fontFamily = this.value;
+        }
+
+        document.getElementById('bgcolor').addEventListener("change", BgColor);
+        function BgColor(){
+            ShowText.style.backgroundColor = this.value;
+        }
+
+        document.getElementById('textcolor').addEventListener("change", TxtColor);
+        function TxtColor(){
+            ShowText.style.color = this.value;
+        }
+
+        document.getElementById('orientation').addEventListener("change", orientation);
+        function orientation(){
+            if(this.value == 'Portrait'){
+                var portraitVal = ShowText.innerHTML;
+                portraitVal = portraitVal.split('')+'<br>';
+            }
+        }
+
+    </script>
+</body>
+</html>
