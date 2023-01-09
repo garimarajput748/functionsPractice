@@ -114,7 +114,8 @@
         function orientation(){
             if(this.value == 'Portrait'){
                 var portraitVal = ShowText.innerHTML;
-                portraitVal = portraitVal.split('')+'<br>';
+                var formattedString = portraitVal.split("").join("<br/>")
+                ShowText.innerHTML = formattedString;
             }
         }
 
