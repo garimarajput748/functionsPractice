@@ -1,8 +1,8 @@
 <?php
-if (isset($_COOKIE['products'])) {
-
-    var_dump($_COOKIE);
-}
+    if(isset($_COOKIE['PrdId'])) {
+        var_dump ($_COOKIE);
+    } 
+    else echo "Something went wrong";
 ?>
  <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +16,24 @@ if (isset($_COOKIE['products'])) {
 </head>
 <body>
     <div class="container">
-        <script>console.log(products);</script>
+        <table class="table table-bordered border-primary">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Product Name</th>
+                    <th>Product Image</th>
+                    <th>Quantity</th>
+                    <th>Price (Rs.)</th>
+                    <th>Action</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </body>
 </html>

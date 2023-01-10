@@ -1,3 +1,20 @@
+<?php 
+      if(isset($_POST['action']) && ($_POST['action'] === 'addToCart'))
+      {
+          $productId = $_POST['key'];
+          $qty = $_POST['qty'];
+
+        setcookie('PrdId'.$productId,$qty);
+        // setcookie('Qty',$qty);
+      
+        $result_arr['status'] = "pass";
+        $result_arr['message'] = "Add to cart Successfully!";
+      
+        echo json_encode($result_arr);
+        exit;
+      
+      }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -83,15 +100,13 @@
                         }
                     };
                     xhttp.open("POST", "products_list.php", true);
-                    xhttp.send(JSON.stringify({
-                        key:this.id,
-                        qty: qty
-                    }));
-                }
-
+                    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    xhttp.send('key='+ this.id + '&qty='+ qty +'&action=addToCart');
+                    }
+                
             });
         });
-
-    </script>
+        
+        </script>
 </body>
 </html>
