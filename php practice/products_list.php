@@ -1,11 +1,23 @@
 <?php 
+    require_once('productDetails.php');
       if(isset($_POST['action']) && ($_POST['action'] === 'addToCart'))
       {
           $productId = $_POST['key'];
           $qty = $_POST['qty'];
 
-        setcookie('PrdId'.$productId,$qty);
-        // setcookie('Qty',$qty);
+        $cookieArr = array($productId => $qty);
+
+        if(isset($_COOKIE['cartDetails'])) {
+            static $cartArr=array();
+            $cartArr = json_decode($_COOKIE['cartDetails'],true);
+            $cartArr[$productId] = $qty;
+            $cookieArr  = $cartArr;
+        }
+
+
+
+        
+        setcookie("cartDetails", json_encode($cookieArr));
       
         $result_arr['status'] = "pass";
         $result_arr['message'] = "Add to cart Successfully!";
@@ -31,54 +43,22 @@
         <a href="viewCart.php" class="float-end">&#128722; Cart</a>
     
         <div class="row gap-5" >
-            <div class="card" style="width: 18rem;">
-                <h5 class="card-title mt-1">FinePix Pro2 3D Camera</h5>
-                <img src="productImages/camera.jpg" class="card-img-top" alt="camera">
+            <?php
+            foreach ($productArr as $productDetails) {
+            echo '<div class="card" style="width: 18rem;">
+                <h5 class="card-title mt-1">'.$productDetails['title'].'</h5>
+                <img src="'.$productDetails['image'].'" class="card-img-top">
                 <div class="card-body">
-                    <p class="card-text text-info text-center">Price: &#x20B9; 25000</p>
+                    <p class="card-text text-info text-center">Price: &#x20B9; '.$productDetails['price'].'</p>
                     <div class="row">
                             <input type="number" name="quantity" placeholder="Quantity" class="form-control w-50" min="1">
-                            <button class="btn btn-primary w-50" id="0">Add To Cart</button>
+                            <button class="btn btn-primary w-50" id="'.$productDetails['id'].'">Add To Cart</button>
                             <span class="text-danger d-none">No. of quantity</span>
                     </div>
                 </div>
-            </div>
-            <div class="card" style="width: 18rem;">
-                <h5 class="card-title mt-1">EXP Portable Hard Drive</h5>
-                <img src="productImages/external-hard-drive.jpg" class="card-img-top" alt="external-hard-drive">
-                <div class="card-body">
-                    <p class="card-text text-info text-center">Price: &#x20B9; 1199</p>
-                    <div class="row">
-                            <input type="number" name="quantity" placeholder="Quantity" class="form-control w-50" min="1">
-                            <button class="btn btn-primary w-50" id="1">Add To Cart</button>
-                            <span class="text-danger d-none">No. of quantity</span>
-                    </div>
-                </div>
-            </div>
-            <div class="card" style="width: 18rem;">
-                <h5 class="card-title mt-1">XP 1155 Gaming Headphone</h5>
-                <img src="productImages/headphones.jpg" class="card-img-top" alt="headphones">
-                <div class="card-body">
-                    <p class="card-text text-info text-center">Price: &#x20B9; 5000</p>
-                    <div class="row">
-                            <input type="number" name="quantity" placeholder="Quantity" class="form-control w-50" min="1">
-                            <button class="btn btn-primary w-50" id="2">Add To Cart</button>
-                            <span class="text-danger d-none">No. of quantity</span>
-                    </div>
-                </div>
-            </div>
-            <div class="card" style="width: 18rem;">
-                <h5 class="card-title mt-1">Luxury Ultra thin Wrist Watch</h5>
-                <img src="productImages/watch.jpg" class="card-img-top" alt="watch">
-                <div class="card-body">
-                    <p class="card-text text-info text-center">Price: &#x20B9; 2500</p>
-                    <div class="row">
-                            <input type="number" name="quantity" placeholder="Quantity" class="form-control w-50" min="1">
-                            <button class="btn btn-primary w-50" id="3">Add To Cart</button>
-                            <span class="text-danger d-none">No. of quantity</span>
-                    </div>
-                </div>
-            </div>
+            </div>';
+            }
+            ?>
         </div>
     </div>
     <script>
