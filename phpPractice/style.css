@@ -1,0 +1,15 @@
+#cart{
+    color: white;
+    background-color:dimgrey;
+    float: left;
+    position: relative;
+    top: -14px;
+    left: 20px;
+    border: 1px solid dimgrey;
+    border-radius: 50%;
+    height: 20px;
+    line-height: 1.1;
+    width: 20px;
+    text-align: center;
+    padding-bottom:2px;
+}

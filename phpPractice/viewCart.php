@@ -1,5 +1,22 @@
 <?php 
     require_once('productDetails.php');
+
+    if(isset($_POST['action']) && ($_POST['action'] === 'delete')){
+        $productId = $_POST['id'];
+        if (isset($_COOKIE['cartDetails'])) {
+            $cartArr = json_decode($_COOKIE['cartDetails'], true);
+            unset($cartArr[$productId]);
+        }
+        setcookie("cartDetails", json_encode($cartArr));
+
+        $result_arr['items'] = count($cartArr);
+        $result_arr['status'] = "pass";
+        $result_arr['message'] = "Item Deleted Successfully!";
+
+        echo json_encode($result_arr);
+        exit;
+    }
+
     if(isset($_COOKIE['cartDetails'])) {
         $Productval = json_decode($_COOKIE['cartDetails'],true);
         $count = 1;
@@ -7,6 +24,7 @@
         $price = 0;
     } 
     else echo "Something went wrong";
+   
 ?>
  <!DOCTYPE html>
 <html lang="en">
@@ -21,7 +39,7 @@
     <title>Exercise PHP</title>
 </head>
 <body>
-    <div class="container mt-5">
+    <div class="container mt-5 d-none" id="">
         <table class="table table-bordered border-muted text-center">
             <thead>
                 <tr>
@@ -35,7 +53,8 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($Productval as $key => $val){ 
+                <?php if(isset($Productval)){
+                foreach ($Productval as $key => $val){ 
                      $keys = array_keys($productArr);
                      $items = $productArr[$keys[$key]]; 
                      ?>
@@ -45,62 +64,57 @@
                     <td><?php echo '<img src='.$items['image'].' class="img-fluid" width="80px" height="50px">' ?></td>
                     <td><?php echo $val; ?></td>
                     <td><?php echo $items['price']; ?></td>
-                    <td><button class="btn btn-danger del" title="<?php echo $items['title']; ?>" data-id="<?php echo $items['id'] ?>">
+                    <td><button class="btn btn-danger del" title="<?php echo $items['title']; ?>" id="<?php echo $items['id'] ?>">
                     <i class="fa fa-trash" aria-hidden="true"></i>
                         </button></td>
                 </tr>
                 <?php   $qty += $val; 
                         $price += $items['price'] * $val; 
                         $count++; 
-                    } ?>
+                    } } ?>
             </tbody>
             <tfoot>
                 <tr>
                     <td>Total</td>
-                    <td colspan="3" class="text-end"><?php echo $qty; ?></td>
-                    <td><?php echo $price; ?></td>
+                    <td colspan="3" class="text-end" id="qty"><?php echo (isset($qty)?$qty:0); ?></td>
+                    <td><?php echo (isset($price)?$price:0); ?></td>
                     <td><button class="btn btn-success" id="checkout">Checkout</button></td>
                 </tr>
             </tfoot>
         </table>
     </div>
+    <div id="emptyCartMessage" class="d-none">Your cart is empty.</div>
     <script>
         function deleteItem(){
             var deleteId = document.querySelectorAll('.del');
             deleteId.forEach(function(btn) {
-            btn.addEventListener('click', function() {
+                btn.addEventListener('click', function() {
                 this.closest('tr').remove();
+                var mesg = confirm("Do You Really Want to Delete?");
+                if(mesg == true){
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                            response = this.responseText;
+                        }
+                    };
+                    xhttp.open("POST", "viewCart.php", true);
+                    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    xhttp.send('id='+ this.id +'&action=delete');
+                }
             });
         });
     }
         deleteItem();
         
-// $(document).ready(function(){
-// $(".del").click(function(item){
-//        var id = $(this).attr('data-id'); 
-//        $(this).closest("tr").remove();
-
-//        var mesg = confirm("Are you sure!");
-       
-//        if (mesg == true) {
-
-//               $.ajax({
-//                       url: "viewCart.php", 
-//                       type:"POST",
-//                       data:{key:id},
-//                       success: function(result){
-//                           alert("Deleted successfully...");
-//                           window.location.reload(true);
-                          
-//                 }});
-           
-//        } else {
-//               alert("Delete process terminate...");
-//               window.location.reload(true);
-
-//        }
-// }); 
-// });
+        const emptyCartMessage = document.getElementById('emptyCartMessage');
+        var div = document.getElementsByTagName('div');
+        var qty = document.getElementById('qty');
+        if(qty.innerHTML == 0) {
+            // div[0].append(emptyCartMessage);
+            emptyCartMessage.classList.remove("d-none");
+        }
+        else emptyCartMessage.classList.add("d-none");
     </script>
 </body>
 </html>
