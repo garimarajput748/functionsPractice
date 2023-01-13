@@ -23,7 +23,7 @@
         $qty = 0;
         $price = 0;
     } 
-    else echo "Something went wrong";
+    else $emptyMesg =  "Your Cart is Empty.";
    
 ?>
  <!DOCTYPE html>
@@ -35,11 +35,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <title>Exercise PHP</title>
 </head>
 <body>
-    <div class="container mt-5 d-none" id="">
+    <div class="container mt-5 text-center" id="itemsContainer">
+        <?php if(isset($emptyMesg)) echo $emptyMesg;?>
         <table class="table table-bordered border-muted text-center">
             <thead>
                 <tr>
@@ -55,6 +55,7 @@
             <tbody>
                 <?php if(isset($Productval)){
                 foreach ($Productval as $key => $val){ 
+                    if (is_numeric($val)){
                      $keys = array_keys($productArr);
                      $items = $productArr[$keys[$key]]; 
                      ?>
@@ -71,6 +72,8 @@
                 <?php   $qty += $val; 
                         $price += $items['price'] * $val; 
                         $count++; 
+                    } 
+                    else continue;
                     } } ?>
             </tbody>
             <tfoot>
@@ -83,7 +86,6 @@
             </tfoot>
         </table>
     </div>
-    <div id="emptyCartMessage" class="d-none">Your cart is empty.</div>
     <script>
         function deleteItem(){
             var deleteId = document.querySelectorAll('.del');
@@ -96,6 +98,7 @@
                     xhttp.onreadystatechange = function() {
                         if (this.readyState == 4 && this.status == 200) {
                             response = this.responseText;
+                            location.reload();
                         }
                     };
                     xhttp.open("POST", "viewCart.php", true);
@@ -105,16 +108,13 @@
             });
         });
     }
-        deleteItem();
-        
-        const emptyCartMessage = document.getElementById('emptyCartMessage');
-        var div = document.getElementsByTagName('div');
-        var qty = document.getElementById('qty');
-        if(qty.innerHTML == 0) {
-            // div[0].append(emptyCartMessage);
-            emptyCartMessage.classList.remove("d-none");
+        deleteItem();  
+        let qty = document.getElementById('qty');
+        if(qty.innerHTML == 0){
+            let table = document.getElementsByTagName('table');
+            table[0].classList.add("d-none");
         }
-        else emptyCartMessage.classList.add("d-none");
+        
     </script>
 </body>
 </html>

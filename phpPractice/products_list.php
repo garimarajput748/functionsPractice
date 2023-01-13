@@ -83,6 +83,7 @@
                if(qty <= 0) this.nextElementSibling.classList.remove("d-none");
 
                else {
+                if(!qty.match(/^(?:[1-9]\d*|\d)$/)) return;
                    var xhttp = new XMLHttpRequest();
                     xhttp.onreadystatechange = function() {
                         if (this.readyState == 4 && this.status == 200) {
@@ -98,7 +99,7 @@
                     xhttp.open("POST", "products_list.php", true);
                     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
                     xhttp.send('key='+ this.id + '&qty='+ qty +'&action=addToCart');
-                    }
+                }
                 
             });
         });
