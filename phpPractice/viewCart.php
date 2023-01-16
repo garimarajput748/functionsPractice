@@ -112,7 +112,7 @@
         let qty = document.getElementById('qty');
         if(qty.innerHTML == 0){
             let table = document.getElementsByTagName('table');
-            table[0].classList.add("d-none");
+            table[0].innerHTML = 'Your Cart is Empty.';
         }
         
     </script>
