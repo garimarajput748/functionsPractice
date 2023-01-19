@@ -4,23 +4,24 @@ session_start();
     //  session_destroy(); 
 if(isset($_POST['submit'])){
 
-    if(isset($_POST['username']) && !empty($_POST['username']))  $userName = $_POST['username'];
-    else  $nameErr = 'Please Fill Your Name';
+    if(!isset($_POST['username']) && empty($_POST['username']))  $nameErr = 'Please Fill Your Name';
+    else $userName = $_POST['username'];
 
-    if(isset($_POST['hobby']) && !empty($_POST['hobby']))   $hobbies = $_POST['hobby'];
-    else $hobbyErr = 'Please Fill Minimum 1 of Your Hobby';
-     
+    if(!isset($_POST['hobby']) && empty($_POST['hobby']))  $hobbyErr = 'Please Fill Minimum 1 of Your Hobby';
+    else  $hobbies = $_POST['hobby'];
+    
     if(!empty($hobbies) && !empty($userName)) $result = 'Your Survey Completed';
     else $err = 'Please Fill the Form';
     
     $sessionArr = array();
-    if(!empty($userName) && !empty($hobbies)) $sessionArr[] = array($userName => $hobbies);
-   
-   
-    if(isset($_SESSION['web_survey'])) {
-        $data = $_SESSION['web_survey'];
-        $sessionArr = array_merge($sessionArr,$data);
+    // if(!empty($userName) && !empty($hobbies)) $sessionArr[] = array($userName => $hobbies);
+    
+    
+    if(isset($_SESSION['web_survey']) && !empty($_SESSION['web_survey'])) {
+        $sessionArr = $_SESSION['web_survey'];
+        $sessionArr[$userName] = $hobbies;
     }
+    elseif(!empty($userName) && !empty($hobbies)) $sessionArr[$userName] = $hobbies;
 
     $_SESSION['web_survey'] = $sessionArr; 
     
@@ -71,33 +72,22 @@ if(isset($_POST['submit'])){
                 </form>
             </div>
             <div class="col-md-6">
-                <h2 id="result"></h2>
+                <h2 id="result"><?php if(isset($result) && !empty($result)) echo $result; 
+                elseif(isset($err) && !empty($err)) echo $err; ?>
+                </h2>
                     <?php 
 
-                   
-                     $count = 1;
-                            
-                    if(isset($_SESSION['web_survey'])) {
-                        $data = $_SESSION['web_survey'];
-                        foreach($data as $survey){
-                            // foreach($survey as $key => $hobby){
-                        //         if(array_key_exists($key,$survey)) {
-                        //             // var_dump($hobby);
-                        //             echo 'You have already submited this survey. <br><hr>';
-                        //             echo 'Your Name is: '.$key.'<hr>';
-                        //             foreach($hobby as $val){
-                        //                 echo 'Your Hobby is: '.$val.'<br>';
-                        //             }
-                        //             return;
-                        //         }
-                            // }
-                        //     $count++;
+                    $count = 1;
+                     if(isset($_SESSION['web_survey']) && !empty($_SESSION['web_survey'])) {
+                         echo 'You have already submited this survey. <br><hr>';
+                         $data = $_SESSION['web_survey'];
+                        foreach($data as $username => $hobby){
+                            $count++;
                         }
                         
                         
                     }
-                    elseif(isset($result)) echo $result;
-                    else echo $err;
+                    
                    
 
                     ?>
