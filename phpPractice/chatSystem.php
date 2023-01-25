@@ -1,13 +1,21 @@
 <?php
+    session_start();
+    // session_destroy();
 if(isset($_POST['name']) && isset($_POST['message'])){
     $name = $_POST['name'];
     $mesg = $_POST['message'];
-    $data = [];
-    $data[$name] = $mesg;
-    foreach($data as $key => $val){
-        echo 'Name: '.($key).'<br>';
-        echo 'Message: '.($val).'<br><hr>';
+
+    $_SESSION[$name] = $mesg;
+
+    if(isset($_SESSION) && !empty($_SESSION)){
+        foreach($_SESSION as $name => $mesg){
+            echo 'Name: '.($name).'<br>';
+            echo 'Message: '.($mesg).'<br><hr>'; 
+        }
     }
+    
+    else echo 'something went wrong';
+    
     
 exit;    
 }
@@ -47,7 +55,13 @@ exit;
             </div>
             <div class="col-md-6">
                 <div class="container">
-                    <p id="result"></p>
+                    <p id="result"><?php  if(isset($_SESSION)){
+                         foreach($_SESSION as $name => $mesg){
+                            echo 'Name: '.($name).'<br>';
+                            echo 'Message: '.($mesg).'<br><hr>'; 
+                           }
+                         } ?>
+                    </p>
                 </div>
             </div>
         </div>
@@ -73,8 +87,9 @@ exit;
         } 
         else document.getElementById("mesgErr").innerHTML = '';
 
+
         $(document).ready(function(){
-                
+            
                 $.ajax({
                     url: "chatSystem.php",
                     type: "POST",
