@@ -8,8 +8,15 @@ if(isset($_POST['name']) && isset($_POST['message'])){
     $mesg = $_POST['message'];
 
    file_put_contents($filepath,$name.' : '.$mesg.'<br>',  FILE_APPEND);
-        echo 'Name: '.$name.'<br>';
-        echo 'Message: '.$mesg.'<br><hr>';
+        if(isset($content) && !empty($content)){
+            echo $content;
+            echo 'Name: '.$name.'<br>';
+            echo 'Message: '.$mesg.'<br><hr>';
+        }
+        else{
+            echo 'Name: '.$name.'<br>';
+            echo 'Message: '.$mesg.'<br><hr>';
+        }
 exit;    
 }
 ?>
