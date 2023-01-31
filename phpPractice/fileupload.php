@@ -1,8 +1,12 @@
 <?php
     $target_dir = "uploads/";
-    $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-    $uploadOk = 1;
-    $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+    
+    if(isset($_FILES["fileToUpload"]["name"])){
+
+        $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+        $uploadOk = 1;
+        $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+    
    
  // Check if image file is a actual image or fake image   
 
@@ -10,17 +14,15 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'UPLOAD'){
     if(isset($imageFileType) && !empty($imageFileType)){
         $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
         if($check !== false) {
-            echo "File is an image - " . $check["mime"] . ".";
+            echo "File is an image - " . $check["mime"] . ".<br>";
             $uploadOk = 1;
           } else {
-            echo "File is not an image.";
+            $err =  "File is not an image.";
             $uploadOk = 0;
-            return;
           }
     }
     else {
-        echo 'Please Select Image';
-        return;
+        $err =  'Please Select Image';
     }
 }
 
@@ -28,36 +30,34 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'UPLOAD'){
     if(!empty($imageFileType)){
         if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
         && $imageFileType != "webp" ) {
-        echo "Sorry, only JPG, JPEG, PNG & WEBP files are allowed.";
+        $err =  "Sorry, only JPG, JPEG, PNG & WEBP files are allowed.";
         $uploadOk = 0;
-        return;
         }
     }
 
 // Check file size
-    if ($_FILES["fileToUpload"]["size"] > 16000000) {
-        echo "Sorry, your file is too large. Max Size can be 2 MB";
+    if ($_FILES["fileToUpload"]["size"] > 1600000) {
+        $err =  "Sorry, your file is too large. Max Size can be 2 MB";
         $uploadOk = 0;
-        return;
     }
 
 // Check if $uploadOk is set to 0 by an error
     if ($uploadOk == 0) {
-        echo "Sorry, your file was not uploaded.";
-        return;
+        if(isset($err)) echo $err ;
+        else echo  "Sorry, your file was not uploaded.";
     }
 
-// if everything is ok, try to upload file
+// if everything is ok,then upload file
   else {
-    // var_dump($_FILES["fileToUpload"]["tmp_name"]); exit;
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
       echo "The file ". htmlspecialchars( basename( $_FILES["fileToUpload"]["name"])). " has been uploaded.";
-      header('Location: '.$_SERVER['PHP_SELF']);
+        header('Location: '.$_SERVER['PHP_SELF']);
     } else {
       echo "Sorry, there was an error uploading your file.";
       return;
     }
   }
+}
 
 ?>
 <!DOCTYPE html>
