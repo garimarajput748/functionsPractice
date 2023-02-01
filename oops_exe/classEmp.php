@@ -1,15 +1,62 @@
 <?php
-class FormValidation {
-
-    private $data;  
-    private static $fields= ['fname', 'lname', 'email','number','gender', 'dob'];
-
+class Employee {
     
+    private $fname;
+    private $lname;
+    private $email;
+    private $number;
+    private $gender;
+    private $dob;
+    private $error = "Please fill all fields";
+    // private  $fields= ['fname', 'lname', 'email','number','gender', 'dob'];
+
+    public function setfName($fname){
+        $this->fname = $fname;
+    }
+    
+    public function setlname($lname){
+        $this->lname = $lname;
+    }
+    public function setemail($email){
+        $this->email = $email;
+    }
+    public function setnumber($number){
+        $this->number = $number;
+    }
+    public function setgender($gender){
+        $this->gender = $gender;
+    }
+    public function setdob($dob){
+        $this->dob = $dob;
+    }
+    public function err(){
+        return $this->error;
+    }
+    
+    public function getemployeedetails(){
+        
+        if(isset($this->fname) && isset($this->lname) && isset($this->email) && isset($this->number) && isset($this->gender) && isset($this->dob))
+        
+        return $this->fname."<br>".$this->lname."<br>".$this->email."<br>".$this->number."<br>".$this->gender."<br>".$this->dob;
+
+        else return; //$this->err();
+
+    }
     
 }
     if(isset($_POST["submit"])){
 
-            $validation = new FormValidation($_POST);
+            $emp = new Employee();
+            $emp->setfName($_POST['fname']);
+            $emp->setlname($_POST['lname']);
+            $emp->setemail($_POST['email']);
+            $emp->setnumber($_POST['number']);
+            $emp->setgender($_POST['gender']);
+            $emp->setdob($_POST['dob']);
+
+            $data = explode("<br>",$emp->getemployeedetails());
+            global $err;
+            $err = $emp->err();
 
         /*if(empty($_POST["fname"]) && empty($_POST["lname"]) && empty($_POST["email"]) && empty($_POST["number"]) && empty($_POST["gender"]) && empty($_POST["dob"])){
             $err = "Please fill all fields";
@@ -28,6 +75,7 @@ class FormValidation {
 
             if(isset($_POST["dob"])) $dob = $_POST["dob"];
         }*/
+        
     } 
 
 ?>
@@ -65,30 +113,34 @@ class FormValidation {
                     <div class="row">
                         <div class="col-6">
                             <label for="fName">FirstName::</label>
-                            <input type="text" name="fname" class="form-control mb-2" placeholder="Enter Your First Name" required>
+                            <input type="text" name="fname" class="form-control mb-2" placeholder="Enter Your First Name" value="<?php isset($_POST['fname'])?$_POST['fname']:''; ?>" required>
                             <label for="email">Email::</label>
-                            <input type="email" name="email" class="form-control mb-2" placeholder="Enter Your @email" required>
+                            <input type="email" name="email" class="form-control mb-2" placeholder="Enter Your @email" value="<?php isset($_POST['email'])?$_POST['email']:''; ?>" required>
                             <label for="gender" class="form-check-label">Gender::</label>
-                            <input type="radio" class="form-check-input" name="gender" class="form-control" value="female" required>Female
-                            <input type="radio" class="form-check-input" name="gender" class="form-control" value="male" required>Male
-                            <input type="radio" class="form-check-input" name="gender" class="form-control" value="other" required>Other
+                            <input type="radio" class="form-check-input" name="gender" class="form-control" value="female" <?php if (isset($_POST['gender']) && $_POST['gender']=="female") echo "checked";?> required>Female
+                            <input type="radio" class="form-check-input" name="gender" class="form-control" value="male" <?php if (isset($_POST['gender']) && $_POST['gender']=="male") echo "checked";?> required>Male
+                            <input type="radio" class="form-check-input" name="gender" class="form-control" value="other" <?php if (isset($_POST['gender']) && $_POST['gender']=="other") echo "checked";?> required>Other
                         </div>
                         <div class="col-6">
                             <label for="LName">LastName::</label>
-                            <input type="text" name="lname" class="form-control mb-2" placeholder="Enter Your Last Name" required>
+                            <input type="text" name="lname" class="form-control mb-2" placeholder="Enter Your Last Name" value="<?php isset($_POST['lname'])?$_POST['lname']:''; ?>" required>
                             <label for="number">Number::</label>
-                            <input type="number" name="number" class="form-control mb-2" placeholder="Enter Your Contact Number" required>
+                            <input type="number" name="number" class="form-control mb-2" placeholder="Enter Your Contact Number" value="<?php isset($_POST['number'])?$_POST['number']:''; ?>" required>
                             <label for="dob">DOB::</label>
-                            <input type="date" name="dob" class="form-control" required>
+                            <input type="date" name="dob" class="form-control" value="<?php isset($_POST['dob'])?$_POST['dob']:''; ?>" required>
                         </div>
-                        <span class="text-danger text-center mt-2"><?php //echo isset($err)?$err:'';?></span>
+                        <span class="text-danger text-center mt-2"><?php echo null !== $err ? $err:''; ?></span>
                     </div>
                     <input type="submit" name="submit" class="btn btn-success mt-4">
                     <input type="reset" class="btn btn-danger mt-4 ms-5" value="RESET">
                 </form>
             </div>
             <div class="col-6">
-
+                    <p> FullName: <?php echo (isset($data[0])?$data[0]:'').' '. (isset($data[1])?$data[1]:''); ?></p>
+                    <p> Email: <?php echo (isset($data[2])?$data[2]:''); ?></p>
+                    <p> Mobile Number: <?php echo (isset($data[3])?$data[3]:''); ?></p>
+                    <p> Gender: <?php echo (isset($data[4])?$data[4]:''); ?></p>
+                    <p> DOB: <?php echo (isset($data[5])?$data[5]:''); ?></p>
             </div>
         </div>
     </div>
