@@ -2,20 +2,48 @@
 require_once("employee.php");
 
 if (isset($_POST["submit"])) {
+    $fname = $lname = $email = $number = $gender = $dob = '';
 
-    if (isset($_POST['fname'])) {
+    if (isset($_POST['fname']) && !empty($_POST['fname'])) {
         $fname = $_POST['fname'];
     }
+    else $fnameErr = "please enter first name";
+
+    if (isset($_POST['lname']) && !empty($_POST['lname'])) {
+        $lname = $_POST['lname'];
+    }
+    else $lnameErr =  "please enter last name";
+
+    if (isset($_POST['email']) && !empty($_POST['email'])) {
+        $email = $_POST['email'];
+    }
+    else $emailErr =  "please enter email";
+
+    if (isset($_POST['number']) && !empty($_POST['number'])) {
+        $number = $_POST['number'];
+    }
+    else $numberErr =  "please enter number";
+
+    if (isset($_POST['gender']) && !empty($_POST['gender'])) {
+        $gender = $_POST['gender'];
+    }
+    else $genderErr =  "please enter gender";
+
+    if (isset($_POST['dob']) && !empty($_POST['dob'])) {
+        $dob = $_POST['dob'];
+    }
+    else $dobErr =  "please enter dob";
 
     $emp = new Employee();
     $emp->setfName($fname);
-    $emp->setlname($_POST['lname']);
-    $emp->setemail($_POST['email']);
-    $emp->setnumber($_POST['number']);
-    $emp->setgender($_POST['gender']);
-    $emp->setdob($_POST['dob']);
+    $emp->setlname($lname);
+    $emp->setemail($email);
+    $emp->setnumber($number);
+    $emp->setgender($gender);
+    $emp->setdob($dob);
 
     $result = $emp->getemployeedetails();
+    // header("Location: #");
 }
 
 ?>
@@ -56,20 +84,26 @@ if (isset($_POST["submit"])) {
                         <div class="col-6">
                             <label for="fName">FirstName::</label>
                             <input type="text" name="fname" class="form-control mb-2" placeholder="Enter Your First Name" value="<?php isset($_POST['fname']) ? $_POST['fname'] : ''; ?>" required>
+                            <p class="text-danger"><?php echo (isset($fnameErr))?$fnameErr : ''; ?></p>
                             <label for="email">Email::</label>
                             <input type="email" name="email" class="form-control mb-2" placeholder="Enter Your @email" value="<?php isset($_POST['email']) ? $_POST['email'] : ''; ?>" required>
+                            <p class="text-danger"><?php echo (isset($emailErr))?$emailErr : ''; ?></p>
                             <label for="gender" class="form-check-label">Gender::</label>
                             <input type="radio" class="form-check-input" name="gender" class="form-control" value="female" <?php if (isset($_POST['gender']) && $_POST['gender'] == "female") echo "checked"; ?> required>Female
                             <input type="radio" class="form-check-input" name="gender" class="form-control" value="male" <?php if (isset($_POST['gender']) && $_POST['gender'] == "male") echo "checked"; ?> required>Male
                             <input type="radio" class="form-check-input" name="gender" class="form-control" value="other" <?php if (isset($_POST['gender']) && $_POST['gender'] == "other") echo "checked"; ?> required>Other
+                            <p class="text-danger"><?php echo (isset($genderErr))?$genderErr : ''; ?></p>
                         </div>
                         <div class="col-6">
                             <label for="LName">LastName::</label>
                             <input type="text" name="lname" class="form-control mb-2" placeholder="Enter Your Last Name" value="<?php isset($_POST['lname']) ? $_POST['lname'] : ''; ?>" required>
+                            <p class="text-danger"><?php echo (isset($lnameErr))?$lnameErr : ''; ?></p>
                             <label for="number">Number::</label>
                             <input type="number" name="number" class="form-control mb-2" placeholder="Enter Your Contact Number" value="<?php isset($_POST['number']) ? $_POST['number'] : ''; ?>" required>
+                            <p class="text-danger"><?php echo (isset($numberErr))?$numberErr : ''; ?></p>
                             <label for="dob">DOB::</label>
                             <input type="date" name="dob" class="form-control" value="<?php isset($_POST['dob']) ? $_POST['dob'] : ''; ?>" required>
+                            <p class="text-danger"><?php echo (isset($dobErr))?$dobErr : ''; ?></p>
                         </div>
                         <span class="text-danger text-center mt-2"><?php echo (isset($result) && !is_array($result)) ? $result  : ''; ?></span>
                     </div>
