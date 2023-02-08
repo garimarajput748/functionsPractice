@@ -50,7 +50,20 @@
                 
                 //here we give the value to this function that will help us to save the value in the local storage
                 addDataLocalStorage(data);
+                
             });
+
+            /*if any list of task is not found */
+            function error_message() {
+            if ($("#myUL").children().length <= 0) {
+                $("#myUL").append("<span class='text-center text-secondary m-5' id='notfound'>Data Not Found</span>");
+                } 
+                else {
+                $("#notfound").remove();
+                }
+            }
+            error_message();
+            
 
             /*add data into localStorage */
             function addDataLocalStorage(newData=''){

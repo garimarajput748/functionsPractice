@@ -36,13 +36,13 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'UPLOAD'){
     }
 
 // Check file size
-    if ($_FILES["fileToUpload"]["size"] > 1600000) {
+    else if ($_FILES["fileToUpload"]["size"] > 1600000) {
         $err =  "Sorry, your file is too large. Max Size can be 2 MB";
         $uploadOk = 0;
     }
 
 // Check if $uploadOk is set to 0 by an error
-    if ($uploadOk == 0) {
+    else if ($uploadOk == 0) {
         if(isset($err)) echo $err ;
         else echo  "Sorry, your file was not uploaded.";
     }
@@ -58,7 +58,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'UPLOAD'){
     }
   }
 }
-
+//for help https://www.codexworld.com/upload-store-image-file-in-database-using-php-mysql/
 ?>
 <!DOCTYPE html>
 <html lang="en">
