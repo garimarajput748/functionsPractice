@@ -26,13 +26,28 @@ if(isset($_POST['submit'])){
     else $interestErr = "Please enter valid interest rate";
 
     if(empty($accNumErr) && empty($accBalErr) && empty($accTypeErr) && empty($interestErr)){
-        $child = new savingAccount();
-        $child->setDetails($accNumber,$accBalance);
-        $res1 = $child->addInterest($accType,$accInterest);
-        var_dump($res1);
-        // $res = $child->getDetails();
-        // var_dump($res);
+
+        if($accType==='Saving Account'){
+
+        $savingAccount = new SavingAccount();
+        $savingAccount->setDetails($accNumber,$accBalance);
+        $savingAccountDetails = $savingAccount->getDetails();
+        $savingAccountInterest = $savingAccount->addInterest($accType,$accInterest);
+            $result = array_merge($savingAccountDetails,$savingAccountInterest);
+        }
+         
+        else if($accType==='Current Account'){
+
+            $currentAccount = new CurrentAccount();
+            $currentAccount->setDetails($accNumber,$accBalance);
+            $currentAccountDetails = $currentAccount->getDetails();
+            $currentAccountInterest = $currentAccount->addInterest($accType,$accInterest);
+                $result = array_merge($currentAccountDetails,$currentAccountInterest);
+        }
+
+        else return "please provide valid information";
     }
+    // unset($_POST['accType']);
     
 }
 
